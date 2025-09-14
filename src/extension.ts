@@ -283,10 +283,11 @@ function completePartialLine(editor: vscode.TextEditor): void {
   }
 
   let snippet = '';
-  const methodRegex = /^\s*((async)\s+)?\s*((get|set|function)\s+)?\s*([a-zA-Z_]\w+)\s*\(.*\)/;
+  // const methodRegex = /^\s*((async)\s+)?\s*((get|set|function)\s+)?\s*([a-zA-Z_]\w+)\s*\(.*\)/;
   if (
-    methodRegex.test(trimmedLineText) ||
-    (blockKeywords.some((keyword) => trimmedLineText.startsWith(keyword)) && !(trimmedLineText.endsWith('{') || nextTrimmedLineText.startsWith('{')))
+    // methodRegex.test(trimmedLineText) ||
+    blockKeywords.some((keyword) => trimmedLineText.startsWith(keyword)) &&
+    !(trimmedLineText.endsWith('{') || nextTrimmedLineText.startsWith('{'))
   ) {
     snippet = getClosingParentheses(line) + ' {\n\t$0\n}';
   } else if (trimmedLineText.endsWith('{')) {
