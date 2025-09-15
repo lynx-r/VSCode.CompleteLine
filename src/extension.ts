@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 
 interface Suggestion {
   label: string;
@@ -30,154 +30,209 @@ enum AdjacentLine {
 }
 
 const blockKeywords = [
-  'if',
-  'for',
-  'foreach',
-  'while',
-  'do',
-  'function',
-  'else',
-  'class',
-  'switch',
-  'try',
-  'catch',
-  'with',
-  'public',
-  'protected',
-  'private',
-  'internal',
+  "if",
+  "for",
+  "foreach",
+  "while",
+  "do",
+  "function",
+  "else",
+  "class",
+  "switch",
+  "try",
+  "catch",
+  "with",
+  "public",
+  "protected",
+  "private",
+  "internal",
 ];
 
-const loopKeywords = ['for', 'foreach', 'do', 'while'];
+const loopKeywords = ["for", "foreach", "do", "while"];
 
 const suggestions: Array<Suggestion> = [
   // if (...)
   {
-    label: 'if (@1)...',
-    snippet: 'if (@1) {\n\t$0\n}',
-    languages: ['javascript', 'javascriptreact', 'typescript', 'typescriptreact'],
-    when: (c) => c.previousLineText.match('^let\\s+(\\w+)\\s*=.*'),
+    label: "if (@1)...",
+    snippet: "if (@1) {\n\t$0\n}",
+    languages: [
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact",
+    ],
+    when: (c) => c.previousLineText.match("^let\\s+(\\w+)\\s*=.*"),
   },
   {
-    label: 'if (@1)...',
-    snippet: 'if (@1) {\n\t$0\n}',
-    languages: ['javascript', 'javascriptreact', 'typescript', 'typescriptreact'],
-    when: (c) => c.previousLineText.match('^const\\s+(\\w+)\\s*=.*'),
+    label: "if (@1)...",
+    snippet: "if (@1) {\n\t$0\n}",
+    languages: [
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact",
+    ],
+    when: (c) => c.previousLineText.match("^const\\s+(\\w+)\\s*=.*"),
   },
   {
-    label: 'if (@1)...',
-    snippet: 'if (@1) {\n\t$0\n}',
-    languages: ['javascript', 'javascriptreact', 'typescript', 'typescriptreact'],
-    when: (c) => c.previousLineText.match('^var\\s+(\\w+)\\s*=.*'),
+    label: "if (@1)...",
+    snippet: "if (@1) {\n\t$0\n}",
+    languages: [
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact",
+    ],
+    when: (c) => c.previousLineText.match("^var\\s+(\\w+)\\s*=.*"),
   },
   {
-    label: 'if (@1)...',
-    snippet: 'if (@1) {\n\t$0\n}',
-    languages: ['javascript', 'javascriptreact', 'typescript', 'typescriptreact'],
-    when: (c) => c.previousLineText.match('^(\\w+)\\s*=.*'),
+    label: "if (@1)...",
+    snippet: "if (@1) {\n\t$0\n}",
+    languages: [
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact",
+    ],
+    when: (c) => c.previousLineText.match("^(\\w+)\\s*=.*"),
   },
 
   // if (...) [csharp]
   {
-    label: 'if (@1 == null)...',
-    snippet: 'if (@1 == null) {\n\t$0\n}',
-    languages: ['csharp'],
-    when: (c) => c.previousLineText.match('^var\\s+(\\w+)\\s*=.*'),
+    label: "if (@1 == null)...",
+    snippet: "if (@1 == null) {\n\t$0\n}",
+    languages: ["csharp"],
+    when: (c) => c.previousLineText.match("^var\\s+(\\w+)\\s*=.*"),
   },
   {
-    label: 'if (@1 == null)...',
-    snippet: 'if (@1 == null) {\n\t$0\n}',
-    languages: ['csharp'],
-    when: (c) => c.previousLineText.match('^(\\w+)\\s*=.*'),
+    label: "if (@1 == null)...",
+    snippet: "if (@1 == null) {\n\t$0\n}",
+    languages: ["csharp"],
+    when: (c) => c.previousLineText.match("^(\\w+)\\s*=.*"),
   },
 
   // for (...) [javascript, typescript]
   {
-    label: 'for (let index of @1)...',
-    snippet: 'for (let ${1:index} of @1) {\n\t$0\n}',
-    languages: ['javascript', 'javascriptreact', 'typescript', 'typescriptreact'],
-    when: (c) => c.previousLineText.match('^let\\s+(\\w+)\\s*=.*'),
+    label: "for (let index of @1)...",
+    snippet: "for (let ${1:index} of @1) {\n\t$0\n}",
+    languages: [
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact",
+    ],
+    when: (c) => c.previousLineText.match("^let\\s+(\\w+)\\s*=.*"),
   },
   {
-    label: 'for (let index of @1)...',
-    snippet: 'for (let ${1:index} of @1) {\n\t$0\n}',
-    languages: ['javascript', 'javascriptreact', 'typescript', 'typescriptreact'],
-    when: (c) => c.previousLineText.match('^const\\s+(\\w+)\\s*=.*'),
+    label: "for (let index of @1)...",
+    snippet: "for (let ${1:index} of @1) {\n\t$0\n}",
+    languages: [
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact",
+    ],
+    when: (c) => c.previousLineText.match("^const\\s+(\\w+)\\s*=.*"),
   },
   {
-    label: 'for (let index of @1)...',
-    snippet: 'for (let ${1:index} of @1) {\n\t$0\n}',
-    languages: ['javascript', 'javascriptreact', 'typescript', 'typescriptreact'],
-    when: (c) => c.previousLineText.match('^var\\s+(\\w+)\\s*=.*'),
+    label: "for (let index of @1)...",
+    snippet: "for (let ${1:index} of @1) {\n\t$0\n}",
+    languages: [
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact",
+    ],
+    when: (c) => c.previousLineText.match("^var\\s+(\\w+)\\s*=.*"),
   },
   {
-    label: 'for (let index of @1)...',
-    snippet: 'for (let ${1:index} of @1) {\n\t$0\n}',
-    languages: ['javascript', 'javascriptreact', 'typescript', 'typescriptreact'],
-    when: (c) => c.previousLineText.match('^(\\w+)\\s*=.*'),
+    label: "for (let index of @1)...",
+    snippet: "for (let ${1:index} of @1) {\n\t$0\n}",
+    languages: [
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact",
+    ],
+    when: (c) => c.previousLineText.match("^(\\w+)\\s*=.*"),
   },
 
   // foreach (...) [csharp]
   {
-    label: 'foreach (var index in @1)...',
-    snippet: 'foreach (var ${1:index} in @1) {\n\t$0\n}',
-    languages: ['csharp'],
-    when: (c) => c.previousLineText.match('^var\\s+(\\w+)\\s*=.*'),
+    label: "foreach (var index in @1)...",
+    snippet: "foreach (var ${1:index} in @1) {\n\t$0\n}",
+    languages: ["csharp"],
+    when: (c) => c.previousLineText.match("^var\\s+(\\w+)\\s*=.*"),
   },
   {
-    label: 'foreach (var index in @1)...',
-    snippet: 'foreach (var ${1:index} in @1) {\n\t$0\n}',
-    languages: ['csharp'],
-    when: (c) => c.previousLineText.match('^(\\w+)\\s*=.*'),
+    label: "foreach (var index in @1)...",
+    snippet: "foreach (var ${1:index} in @1) {\n\t$0\n}",
+    languages: ["csharp"],
+    when: (c) => c.previousLineText.match("^(\\w+)\\s*=.*"),
   },
 
   // more suggestions
   {
-    label: 'else...',
-    snippet: 'else {\n\t$0\n}',
-    when: (c) => c.previousLineKeyword === 'if',
+    label: "else...",
+    snippet: "else {\n\t$0\n}",
+    when: (c) => c.previousLineKeyword === "if",
   },
   {
-    label: 'else if...',
-    snippet: 'else if {\n\t$0\n}',
-    when: (c) => c.previousLineKeyword === 'if',
+    label: "else if...",
+    snippet: "else if (@1) {\n\t$0\n}",
+    when: (c) => c.previousLineKeyword === "if",
   },
   {
-    label: 'case...',
-    snippet: 'case ${1:condition}:\n\t$0\n\tbreak;',
-    when: (c) => c.parentLineKeyword === 'switch' || c.previousLineKeyword === 'case',
+    label: "case...",
+    snippet: "case ${1:condition}:\n\t$0\n\tbreak;",
+    when: (c) =>
+      c.parentLineKeyword === "switch" || c.previousLineKeyword === "case",
   },
   {
-    label: 'default...',
-    snippet: 'default:\n\t$0\n\tbreak;',
-    when: (c) => c.parentLineKeyword === 'switch' || c.previousLineKeyword === 'case',
+    label: "default...",
+    snippet: "default:\n\t$0\n\tbreak;",
+    when: (c) =>
+      c.parentLineKeyword === "switch" || c.previousLineKeyword === "case",
   },
   {
-    label: 'catch...',
-    snippet: 'catch {\n\t$0\n}',
-    when: (c) => c.previousLineKeyword === 'try',
+    label: "catch...",
+    snippet: "catch {\n\t$0\n}",
+    when: (c) => c.previousLineKeyword === "try",
   },
   {
-    label: 'break',
-    snippet: 'break;',
+    label: "break",
+    snippet: "break;",
     when: (c) => c.isWithinLoop && !c.nextLine,
   },
   {
-    label: 'continue',
-    snippet: 'continue;',
+    label: "continue",
+    snippet: "continue;",
     when: (c) => c.isWithinLoop && !c.nextLine,
   },
   {
-    label: 'return',
-    snippet: 'return;',
+    label: "return",
+    snippet: "return;",
     when: (c) => !c.nextLine,
   },
 ];
 
-const supportedLanguages = ['typescript', 'typescriptreact', 'javascript', 'javascriptreact', 'csharp', 'c', 'cpp', 'rust', 'vue'];
-
+const supportedLanguages = [
+  "typescript",
+  "typescriptreact",
+  "javascript",
+  "javascriptreact",
+  "csharp",
+  "c",
+  "cpp",
+  "rust",
+  "vue",
+  "java",
+];
 export function activate(context: vscode.ExtensionContext) {
-  let disposable = vscode.commands.registerCommand('extension.completeLine', () => completeLine());
+  let disposable = vscode.commands.registerCommand(
+    "extension.completeLine",
+    () => completeLine()
+  );
   context.subscriptions.push(disposable);
 }
 
@@ -208,15 +263,20 @@ function completeBlankLine(editor: vscode.TextEditor): void {
   const activeLine = editor.selection.active.line;
   const language = document.languageId;
 
-  const previousLine = getAdjacentLine(document, activeLine, AdjacentLine.Previous);
+  const previousLine = getAdjacentLine(
+    document,
+    activeLine,
+    AdjacentLine.Previous
+  );
   const nextLine = getAdjacentLine(document, activeLine, AdjacentLine.Next);
   const parentLines = getParentLines(document, activeLine);
 
   const context: SuggestionContext = {
-    previousLineKeyword: previousLine ? previousLine.keyword : '',
-    previousLineText: previousLine ? previousLine.line.text.trim() : '',
-    parentLineKeyword: parentLines.length > 0 ? parentLines[0].keyword : '',
-    parentLineText: parentLines.length > 0 ? parentLines[0].line.text.trim() : '',
+    previousLineKeyword: previousLine ? previousLine.keyword : "",
+    previousLineText: previousLine ? previousLine.line.text.trim() : "",
+    parentLineKeyword: parentLines.length > 0 ? parentLines[0].keyword : "",
+    parentLineText:
+      parentLines.length > 0 ? parentLines[0].line.text.trim() : "",
     isWithinLoop: isWithinLoop(parentLines),
     previousLine: previousLine,
     parentLines: parentLines,
@@ -242,31 +302,33 @@ function completeBlankLine(editor: vscode.TextEditor): void {
     if (Array.isArray(result)) {
       for (let i = 1; i < result.length; i++) {
         const parameter = result[i];
-        label = label.replace('@' + i, parameter);
-        snippet = snippet.replace('@' + i, parameter);
+        label = label.replace("@" + i, parameter);
+        snippet = snippet.replace("@" + i, parameter);
       }
     }
 
     if (document.eol === vscode.EndOfLine.CRLF) {
-      snippet = snippet.replace('\n', '\r\n');
+      snippet = snippet.replace("\n", "\r\n");
     }
 
-    items.push({ label: label, snippet: new vscode.SnippetString(snippet) });
+    items.push({ label, snippet: new vscode.SnippetString(snippet) });
   }
 
   // todo: add standard snippets to list
 
   // if nothing is available, show standard snippets
   if (items.length === 0) {
-    vscode.commands.executeCommand('editor.action.insertSnippet');
+    vscode.commands.executeCommand("editor.action.insertSnippet");
     return;
   }
 
-  vscode.window.showQuickPick<SnippetQuickPickItem>(items, { placeHolder: 'Suggestions' }).then((selectedItem) => {
-    if (selectedItem) {
-      editor.insertSnippet(selectedItem.snippet);
-    }
-  });
+  vscode.window
+    .showQuickPick<SnippetQuickPickItem>(items, { placeHolder: "Suggestions" })
+    .then((selectedItem) => {
+      if (selectedItem) {
+        editor.insertSnippet(selectedItem.snippet);
+      }
+    });
 }
 
 function completePartialLine(editor: vscode.TextEditor): void {
@@ -274,38 +336,43 @@ function completePartialLine(editor: vscode.TextEditor): void {
   const activeLine = editor.selection.active.line;
 
   const line = document.lineAt(activeLine);
-  const trimmedLineText = line ? line.text.trim() : '';
+  const trimmedLineText = line ? line.text.trim() : "";
 
-  let nextTrimmedLineText = '';
+  let nextTrimmedLineText = "";
   if (activeLine < document.lineCount - 1) {
     const nextLine = document.lineAt(activeLine + 1);
-    nextTrimmedLineText = nextLine ? nextLine.text.trim() : '';
+    nextTrimmedLineText = nextLine ? nextLine.text.trim() : "";
   }
 
-  let snippet = '';
-  // const methodRegex = /^\s*((async)\s+)?\s*((get|set|function)\s+)?\s*([a-zA-Z_]\w+)\s*\(.*\)/;
-  if (
-    // methodRegex.test(trimmedLineText) ||
-    blockKeywords.some((keyword) => trimmedLineText.startsWith(keyword)) &&
-    !(trimmedLineText.endsWith('{') || nextTrimmedLineText.startsWith('{'))
-  ) {
-    snippet = getClosingParentheses(line) + ' {\n\t$0\n}';
-  } else if (trimmedLineText.endsWith('{')) {
-    snippet = '\n\t$0\n}';
-  } else if (trimmedLineText.endsWith('=>')) {
-    snippet = ' {\n\t$0\n}';
-  } else if (!trimmedLineText.endsWith(';')) {
-    snippet = getClosingParentheses(line) + ';\n';
+  let snippet = "";
+  const isKeyWord = blockKeywords.some((keyword) =>
+    trimmedLineText.includes(keyword)
+  );
+  const isNotBlock = !(
+    trimmedLineText.endsWith("{") || nextTrimmedLineText.startsWith("{")
+  );
+  const isMethod =
+    /^\s*((async)\s+)?\s*((get|set|function)\s+)?\s*([a-zA-Z_]\w*)\s*\(.*\)/.test(
+      trimmedLineText
+    );
+  if (isMethod || (isKeyWord && isNotBlock)) {
+    snippet = getClosingParentheses(line) + " {\n\t$0\n}";
+  } else if (trimmedLineText.endsWith("{")) {
+    snippet = "\n\t$0\n}";
+  } else if (trimmedLineText.endsWith("=>")) {
+    snippet = " {\n\t$0\n}";
+  } else if (!trimmedLineText.endsWith(";")) {
+    snippet = getClosingParentheses(line) + ";\n";
   } else {
-    snippet = '\n';
+    snippet = "\n";
   }
 
-  if (snippet === '') {
+  if (snippet === "") {
     return;
   }
 
   if (document.eol === vscode.EndOfLine.CRLF) {
-    snippet = snippet.replace('\n', '\r\n');
+    snippet = snippet.replace("\n", "\r\n");
   }
 
   editor.insertSnippet(new vscode.SnippetString(snippet), line.range.end);
@@ -317,26 +384,34 @@ function getClosingParentheses(line: vscode.TextLine): string {
 
   for (let i = 0; i < trimmedLineText.length; i++) {
     switch (trimmedLineText.charAt(i)) {
-      case '(':
+      case "(":
         openParentheses++;
         break;
-      case ')':
+      case ")":
         openParentheses--;
         break;
     }
   }
 
-  return openParentheses > 0 ? ')'.repeat(openParentheses) : '';
+  return openParentheses > 0 ? ")".repeat(openParentheses) : "";
 }
 
 function getLineLevel(line: vscode.TextLine): number {
   return line.firstNonWhitespaceCharacterIndex;
 }
 
-function getAdjacentLine(document: vscode.TextDocument, activeLine: number, direction: AdjacentLine): Line | undefined {
+function getAdjacentLine(
+  document: vscode.TextDocument,
+  activeLine: number,
+  direction: AdjacentLine
+): Line | undefined {
   const activeLineLevel = getLineLevel(document.lineAt(activeLine));
 
-  for (let lineNumber = activeLine + direction; lineNumber >= 0 && lineNumber < document.lineCount; lineNumber += direction) {
+  for (
+    let lineNumber = activeLine + direction;
+    lineNumber >= 0 && lineNumber < document.lineCount;
+    lineNumber += direction
+  ) {
     const line = document.lineAt(lineNumber);
     if (!isStatement(line)) {
       continue;
@@ -355,7 +430,10 @@ function getAdjacentLine(document: vscode.TextDocument, activeLine: number, dire
   return undefined;
 }
 
-function getParentLines(document: vscode.TextDocument, activeLine: number): Line[] {
+function getParentLines(
+  document: vscode.TextDocument,
+  activeLine: number
+): Line[] {
   let lines = new Array<Line>();
   let activeLineLevel = getLineLevel(document.lineAt(activeLine));
 
@@ -385,12 +463,17 @@ function isStatement(line: vscode.TextLine): boolean {
 
   // comments
   // todo: support for block comments
-  if (trimmedLineText.startsWith('//') || trimmedLineText.startsWith('/*') || trimmedLineText.startsWith('*/') || trimmedLineText.startsWith('*')) {
+  if (
+    trimmedLineText.startsWith("//") ||
+    trimmedLineText.startsWith("/*") ||
+    trimmedLineText.startsWith("*/") ||
+    trimmedLineText.startsWith("*")
+  ) {
     return false;
   }
 
   // curly braces
-  if (trimmedLineText === '{' || trimmedLineText === '}') {
+  if (trimmedLineText === "{" || trimmedLineText === "}") {
     return false;
   }
 
@@ -402,13 +485,13 @@ function isWithinLoop(parentLines: Line[]): boolean {
 }
 
 class Line {
-  private static keywordRegExp = new RegExp('^\\w+');
+  private static keywordRegExp = new RegExp("^\\w+");
 
-  public keyword: string = '';
+  public keyword: string = "";
 
   constructor(public line: vscode.TextLine) {
     const result = Line.keywordRegExp.exec(line.text.trim());
-    this.keyword = result ? result[0] : '';
+    this.keyword = result ? result[0] : "";
   }
 }
 
